@@ -9,13 +9,17 @@
 struct BasicTransform {
     // TODO: Determine if possible in general, else provide counterexample:
     // compose(f, g) is equivalent to first applying g, then applying f.
+
+    // Always possible: f(g(x)) = (s_f*s_g)*x + (s_f*t_g + t_f), which is again a BasicTransform.
     static BasicTransform compose(const BasicTransform& f, const BasicTransform& g) {
-        return {};
+        return BasicTransform(f.scale * g.scale, f.scale * g.translation + f.translation);
     };
 
     // TODO: Determine if possible in general, else provide counterexample:
+    // Always possible for nonzero scale: x = (1/s)*y + (-t/s), which is again a BasicTransform.
     static BasicTransform inverse(const BasicTransform& f) {
-        return {};
+        assert(f.scale.x != 0.f && f.scale.y != 0.f);
+        return BasicTransform(sf::Vector2f{1.f, 1.f} / f.scale, -f.translation / f.scale);
     };
 
     constexpr BasicTransform(const sf::Vector2f& scale = {1.f, 1.f},

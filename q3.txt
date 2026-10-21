@@ -1,0 +1,18 @@
+Q1. Which data field of your Sprite is the best candidate to move out into a separate
+component type in an ECS setup? Choose the one that is most likely to apply to things
+other than sprites. Briefly justify your choice.
+
+The transform (mTransform, which holds the position and scale) is the best one to move
+out. Pretty much every game object needs a position and size, not just sprites (enemies,
+bullets, hitboxes, the camera), and systems like physics or collision only care about
+where something is, not what it looks like.
+
+
+Q2. What does this mean we have to do if we want to render multiple, possibly translucent
+sprites on top of each other (think of windows with different colour tints stacked on top
+of each other)?
+
+Since the blend result depends on which colour is on top, we have to draw the sprites in
+order from back to front, sorting them by depth so the farthest ones are drawn first and
+the closest ones last. That way, each see-through sprite gets blended over whatever is
+already behind it, just like looking through a stack of tinted windows.
